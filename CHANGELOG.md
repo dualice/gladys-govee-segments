@@ -10,6 +10,8 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-11-05
+
 ### Added
 
 - Scene action "Paint a gradient across both bars" (one gradient over every
@@ -30,5 +32,6 @@ the notes of the version's GitHub Release.
   white temperature, and one color control per segment (tested on the H6056).
 - Scene action "Paint a gradient" between two colors along the bar.
 
-[Unreleased]: https://github.com/dualice/gladys-govee-segments/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/dualice/gladys-govee-segments/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/dualice/gladys-govee-segments/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/dualice/gladys-govee-segments/releases/tag/v1.0.1
