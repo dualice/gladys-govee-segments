@@ -8,7 +8,11 @@ a separate color for each segment. No Govee account, no API key and no cloud.
 One device with these controls:
 
 - **Power**, **Brightness**, **Color** (the whole bar) and **Color temperature**;
-- one **Segment N** color control per segment of the light.
+- one color control per segment, named by position, for example
+  **Left bar 1 (bottom)** to **Right bar 6 (top)**.
+
+Segments are numbered bar by bar, each bar from bottom to top. On the H6056
+(two bars of 6 segments), segments 1-6 are the left bar and 7-12 the right bar.
 
 ## Setup
 
@@ -17,13 +21,18 @@ One device with these controls:
 2. Find the light's IP address (your router lists it) and give it a fixed
    address so it does not change.
 3. In the **Configuration** tab of this integration, enter the IP address and
-   the number of segments of your light, then save.
+   the total number of segments and the number of segments per bar (12 and 6
+   for the H6056), then save.
 4. Open the **Discovery** tab and add the device.
 
 ## Scenes
 
-The **Paint a gradient** action fades the segments from one color to another.
-Both colors are written like `#ff8800`.
+- **Paint a gradient** fades each bar from the first color (bottom) to the last
+  color (top), the same on every bar.
+- **Paint a gradient across both bars** fades all the segments as if the bars
+  were one long light.
+
+Colors are written like `#ff8800`.
 
 ## Good to know
 

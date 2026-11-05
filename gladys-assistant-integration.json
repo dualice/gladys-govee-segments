@@ -40,11 +40,24 @@
       "type": "number",
       "label": { "en": "Number of segments", "fr": "Nombre de segments" },
       "description": {
-        "en": "How many separately colored segments the light has (1 to 15).",
-        "fr": "Nombre de segments de couleur distincts de la barre (1 à 15)."
+        "en": "How many separately colored segments the whole light has, all bars together (1 to 15). The H6056 has 12.",
+        "fr": "Nombre de segments de couleur distincts de l'ensemble de la lumière, toutes barres confondues (1 à 15). Le H6056 en a 12."
       },
       "required": false,
-      "default": 10,
+      "default": 12,
+      "min": 1,
+      "max": 15
+    },
+    {
+      "key": "segments_per_bar",
+      "type": "number",
+      "label": { "en": "Segments per bar", "fr": "Segments par barre" },
+      "description": {
+        "en": "How many segments one bar has. Segments are numbered bar by bar, each from bottom to top. Used to name the controls and to repeat a gradient on every bar.",
+        "fr": "Nombre de segments d'une barre. Les segments sont numérotés barre par barre, chacune de bas en haut. Sert à nommer les contrôles et à répéter un dégradé sur chaque barre."
+      },
+      "required": false,
+      "default": 6,
       "min": 1,
       "max": 15
     }
@@ -54,8 +67,41 @@
       "key": "set_gradient",
       "label": { "en": "Paint a gradient", "fr": "Peindre un dégradé" },
       "description": {
-        "en": "Fade the segments from one color to another along the light bar.",
-        "fr": "Dégrade les segments d'une couleur à une autre le long de la barre."
+        "en": "Fade each bar from one color (bottom) to another (top), the same on every bar.",
+        "fr": "Dégrade chaque barre d'une couleur (bas) à une autre (haut), de la même façon sur chaque barre."
+      },
+      "timeout_seconds": 15,
+      "fields": [
+        {
+          "key": "from",
+          "type": "string",
+          "label": { "en": "First color (#rrggbb)", "fr": "Première couleur (#rrggbb)" },
+          "required": true
+        },
+        {
+          "key": "to",
+          "type": "string",
+          "label": { "en": "Last color (#rrggbb)", "fr": "Dernière couleur (#rrggbb)" },
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "segments",
+          "type": "number",
+          "label": { "en": "Segments painted", "fr": "Segments peints" }
+        }
+      ]
+    },
+    {
+      "key": "set_gradient_across",
+      "label": {
+        "en": "Paint a gradient across both bars",
+        "fr": "Peindre un dégradé sur les deux barres"
+      },
+      "description": {
+        "en": "Fade all the segments from one color to another, as if the bars were one long light.",
+        "fr": "Dégrade tous les segments d'une couleur à une autre, comme si les barres ne faisaient qu'une."
       },
       "timeout_seconds": 15,
       "fields": [

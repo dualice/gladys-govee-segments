@@ -14,6 +14,7 @@ import { normalizeConfig } from '../src/config.js';
 import { bar } from '../src/devices/bar.js';
 import { buildDiscoveredDevices, findBlueprintByDevice } from '../src/devices/index.js';
 import { SCENE_ACTIONS } from '../src/scenes.js';
+import { barCount, repeatPerBar, segmentLabel } from '../src/layout.js';
 
 const sent = [];
 setTransport(async (ip, message) => {
@@ -23,7 +24,11 @@ afterEach(() => {
   sent.length = 0;
 });
 
-const config = normalizeConfig({ device_ip: '192.168.1.237', segment_count: 4 });
+const config = normalizeConfig({
+  device_ip: '192.168.1.237',
+  segment_count: 4,
+  segments_per_bar: 2,
+});
 
 async function setup() {
   const gladys = createFakeGladys();
@@ -77,13 +82,13 @@ test('gradient hits both ends', () => {
 
 test('Gladys accepts the discovery payload and lists one color per segment', async () => {
   const { device } = await setup();
-  const segments = device.features.filter((f) => f.name.startsWith('Segment'));
+  const segments = device.features.filter((f) => f.external_id.includes('segment-'));
   assert.equal(segments.length, 4);
 });
 
 test('a segment color command reaches the light and is reflected', async () => {
   const { gladys, feature } = await setup();
-  const target = feature('Segment 2');
+  const target = feature('Left bar 2 (top)');
   await setValue(gladys, target, 0x00ff00);
   assert.equal(sent.length, 1);
   assert.equal(sent[0].ip, '192.168.1.237');
@@ -139,15 +144,74 @@ test('set_gradient paints every segment', async () => {
     config,
   });
   assert.deepEqual(out, { segments: 4 });
-  assert.equal(sent[0].message.msg.data.command.length, 4);
+  assert.equal(sent[0].message.msg.data.command.length, 2);
   await assert.rejects(
     SCENE_ACTIONS.set_gradient(gladys, { fields: { from: 'red', to: '#0000ff' }, config }),
     /#ff8800/,
   );
 });
 
+test('segments are named by bar and position', () => {
+  const h6056 = normalizeConfig({ segment_count: 12, segments_per_bar: 6 });
+  assert.equal(barCount(h6056), 2);
+  assert.equal(segmentLabel(0, h6056), 'Left bar 1 (bottom)');
+  assert.equal(segmentLabel(2, h6056), 'Left bar 3');
+  assert.equal(segmentLabel(5, h6056), 'Left bar 6 (top)');
+  assert.equal(segmentLabel(6, h6056), 'Right bar 1 (bottom)');
+  assert.equal(segmentLabel(11, h6056), 'Right bar 6 (top)');
+  assert.equal(
+    segmentLabel(0, normalizeConfig({ segment_count: 9, segments_per_bar: 3 })),
+    'Bar 1 1 (bottom)',
+  );
+  assert.equal(
+    segmentLabel(0, normalizeConfig({ segment_count: 1, segments_per_bar: 1 })),
+    'Segment 1',
+  );
+});
+
+test('discovered features carry the positional names', async () => {
+  const { device } = await setup();
+  const names = device.features.filter((f) => f.name.includes('bar')).map((f) => f.name);
+  assert.deepEqual(names, [
+    'Left bar 1 (bottom)',
+    'Left bar 2 (top)',
+    'Right bar 1 (bottom)',
+    'Right bar 2 (top)',
+  ]);
+});
+
+test('repeatPerBar copies one bar on every bar', () => {
+  assert.deepEqual(repeatPerBar([1, 2], config), [1, 2, 1, 2]);
+});
+
+test('set_gradient repeats the gradient on each bar, bottom to top', async () => {
+  const gladys = createFakeGladys();
+  await SCENE_ACTIONS.set_gradient(gladys, {
+    fields: { from: '#ff0000', to: '#0000ff' },
+    config,
+  });
+  // 4 segments, 2 per bar: red/blue on each bar -> 2 distinct colors -> 2 packets.
+  const commands = sent[0].message.msg.data.command;
+  assert.equal(commands.length, 2);
+  const masks = commands.map((c) => Buffer.from(c, 'base64')[12]).sort((a, b) => a - b);
+  assert.deepEqual(masks, [0b0101, 0b1010]);
+});
+
+test('set_gradient_across paints one gradient over every segment', async () => {
+  const gladys = createFakeGladys();
+  const out = await SCENE_ACTIONS.set_gradient_across(gladys, {
+    fields: { from: '#ff0000', to: '#0000ff' },
+    config,
+  });
+  assert.deepEqual(out, { segments: 4 });
+  assert.equal(sent[0].message.msg.data.command.length, 4);
+});
+
 test('config is normalized and clamped', () => {
   assert.equal(normalizeConfig({ segment_count: '99' }).segment_count, 15);
-  assert.equal(normalizeConfig({ segment_count: 'abc' }).segment_count, 10);
+  assert.equal(normalizeConfig({ segment_count: 'abc' }).segment_count, 12);
   assert.equal(normalizeConfig({ device_ip: ' 10.0.0.5 ' }).device_ip, '10.0.0.5');
+  assert.equal(normalizeConfig({}).segment_count, 12);
+  assert.equal(normalizeConfig({}).segments_per_bar, 6);
+  assert.equal(normalizeConfig({ segment_count: 4, segments_per_bar: 9 }).segments_per_bar, 4);
 });

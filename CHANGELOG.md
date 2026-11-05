@@ -10,6 +10,18 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+### Added
+
+- Scene action "Paint a gradient across both bars" (one gradient over every
+  segment).
+- Setting "Segments per bar" (default 6).
+
+### Changed
+
+- Segment controls are named by position ("Left bar 1 (bottom)").
+- The default segment count is now 12.
+- "Paint a gradient" repeats the gradient on every bar, bottom to top.
+
 ## [1.0.1] - 2026-11-05
 
 ### Added

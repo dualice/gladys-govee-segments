@@ -2,7 +2,7 @@
 // Device: a Govee RGBIC light bar controlled over the local network.
 //
 // Features: power, brightness, whole-bar color, white temperature, plus one
-// color feature per segment ("Segment 1" ... "Segment N").
+// color feature per segment ("Left bar 1 (bottom)" ... , keyed segment-1 ... segment-N).
 // -----------------------------------------------------------------------------
 
 import {
@@ -12,6 +12,7 @@ import {
   DEVICE_FEATURE_UNITS,
 } from '@gladysassistant/integration-sdk';
 import { intToRgb, lan } from '../govee-lan.js';
+import { segmentLabel } from '../layout.js';
 
 const DEVICE_TYPE = 'light-bar';
 
@@ -55,10 +56,15 @@ export const bar = {
       ...extra,
     });
     const segments = Array.from({ length: config.segment_count }, (_, i) =>
-      light(`Segment ${i + 1}`, `${SEGMENT_PREFIX}${i + 1}`, DEVICE_FEATURE_TYPES.LIGHT.COLOR, {
-        min: 0,
-        max: 16777215,
-      }),
+      light(
+        segmentLabel(i, config),
+        `${SEGMENT_PREFIX}${i + 1}`,
+        DEVICE_FEATURE_TYPES.LIGHT.COLOR,
+        {
+          min: 0,
+          max: 16777215,
+        },
+      ),
     );
     return {
       name: config.device_name,

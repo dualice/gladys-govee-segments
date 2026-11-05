@@ -10,7 +10,12 @@ Un appareil avec ces commandes :
 
 - **Marche/arrêt**, **Luminosité**, **Couleur** (toute la barre) et
   **Température de couleur** ;
-- une commande de couleur **Segment N** par segment de la barre.
+- une commande de couleur par segment, nommée selon sa position, par exemple
+  **Left bar 1 (bottom)** à **Right bar 6 (top)**.
+
+Les segments sont numérotés barre par barre, chacune de bas en haut. Sur le
+H6056 (deux barres de 6 segments), les segments 1 à 6 forment la barre gauche et
+7 à 12 la barre droite.
 
 ## Installation
 
@@ -19,13 +24,18 @@ Un appareil avec ces commandes :
 2. Repérez l'adresse IP de la barre (votre routeur la liste) et donnez-lui une
    adresse fixe pour qu'elle ne change pas.
 3. Dans l'onglet **Configuration** de cette intégration, saisissez l'adresse IP
-   et le nombre de segments de votre barre, puis enregistrez.
+   le nombre total de segments et le nombre de segments par barre (12 et 6 pour le
+   H6056), puis enregistrez.
 4. Ouvrez l'onglet **Découverte** et ajoutez l'appareil.
 
 ## Scènes
 
-L'action **Peindre un dégradé** dégrade les segments d'une couleur à une autre.
-Les deux couleurs s'écrivent comme `#ff8800`.
+- **Peindre un dégradé** dégrade chaque barre de la première couleur (bas) à la
+  dernière (haut), de la même façon sur chaque barre.
+- **Peindre un dégradé sur les deux barres** dégrade tous les segments comme si
+  les barres ne faisaient qu'une.
+
+Les couleurs s'écrivent comme `#ff8800`.
 
 ## Bon à savoir
 
