@@ -1,6 +1,6 @@
 {
   "name": "gladys-govee-segments",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Gladys Assistant integration: local control of a Govee RGBIC light bar, with a color per segment.",
   "type": "module",

@@ -6,8 +6,8 @@
     "en": "Local control of a Govee RGBIC light bar, with a color per segment.",
     "fr": "Contrôle local d'une barre lumineuse Govee RGBIC, avec une couleur par segment."
   },
-  "version": "1.0.0",
-  "docker_image": "ghcr.io/OWNER/gladys-govee-segments:1.0.0",
+  "version": "1.0.1",
+  "docker_image": "ghcr.io/dualice/gladys-govee-segments:1.0.1",
   "gladys_version": ">=5.1.0",
   "categories": ["lighting"],
   "transports": ["local"],

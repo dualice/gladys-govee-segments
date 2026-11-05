@@ -10,8 +10,13 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-05
+
 ### Added
 
 - Local control of a Govee RGBIC light bar: power, brightness, whole-bar color,
   white temperature, and one color control per segment (tested on the H6056).
 - Scene action "Paint a gradient" between two colors along the bar.
+
+[Unreleased]: https://github.com/dualice/gladys-govee-segments/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/dualice/gladys-govee-segments/releases/tag/v1.0.1
