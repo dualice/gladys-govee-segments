@@ -1,0 +1,84 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "Govee Light Bar Segments",
+  "description": {
+    "en": "Local control of a Govee RGBIC light bar, with a color per segment.",
+    "fr": "Contrôle local d'une barre lumineuse Govee RGBIC, avec une couleur par segment."
+  },
+  "version": "1.0.0",
+  "docker_image": "ghcr.io/OWNER/gladys-govee-segments:1.0.0",
+  "gladys_version": ">=5.1.0",
+  "categories": ["lighting"],
+  "transports": ["local"],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": { "en": "Getting started", "fr": "Pour commencer" },
+      "description": {
+        "en": "In the Govee Home app, open the light bar's settings and turn on LAN Control. Then enter the light's IP address below (give it a fixed address in your router).",
+        "fr": "Dans l'application Govee Home, ouvrez les réglages de la barre lumineuse et activez le contrôle LAN. Saisissez ensuite son adresse IP ci-dessous (donnez-lui une adresse fixe dans votre routeur)."
+      }
+    },
+    {
+      "key": "device_name",
+      "type": "string",
+      "label": { "en": "Device name", "fr": "Nom de l'appareil" },
+      "required": false,
+      "default": "Govee light bar"
+    },
+    {
+      "key": "device_ip",
+      "type": "string",
+      "label": { "en": "Light bar IP address", "fr": "Adresse IP de la barre lumineuse" },
+      "placeholder": { "en": "e.g. 192.168.1.237", "fr": "ex. 192.168.1.237" },
+      "required": true
+    },
+    {
+      "key": "segment_count",
+      "type": "number",
+      "label": { "en": "Number of segments", "fr": "Nombre de segments" },
+      "description": {
+        "en": "How many separately colored segments the light has (1 to 15).",
+        "fr": "Nombre de segments de couleur distincts de la barre (1 à 15)."
+      },
+      "required": false,
+      "default": 10,
+      "min": 1,
+      "max": 15
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "set_gradient",
+      "label": { "en": "Paint a gradient", "fr": "Peindre un dégradé" },
+      "description": {
+        "en": "Fade the segments from one color to another along the light bar.",
+        "fr": "Dégrade les segments d'une couleur à une autre le long de la barre."
+      },
+      "timeout_seconds": 15,
+      "fields": [
+        {
+          "key": "from",
+          "type": "string",
+          "label": { "en": "First color (#rrggbb)", "fr": "Première couleur (#rrggbb)" },
+          "required": true
+        },
+        {
+          "key": "to",
+          "type": "string",
+          "label": { "en": "Last color (#rrggbb)", "fr": "Dernière couleur (#rrggbb)" },
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "segments",
+          "type": "number",
+          "label": { "en": "Segments painted", "fr": "Segments peints" }
+        }
+      ]
+    }
+  ]
+}
